@@ -77,7 +77,12 @@
                             <th>Sumber</th>
                             <th class="action-heading"><span class="sr-only">Aksi</span></th>
                         </tr></thead>
-                        <!-- grup mata kuliah ditambahkan di commit berikutnya -->
+                                                <% kelompokMateri.forEach(kelompok => { %>
+                            <tbody class="course-group">
+                                <tr class="course-group-heading"><th colspan="5"><span class="course-mark"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15M8 7h8M8 10.5h7"/></svg></span><span><small>MATA KULIAH</small><strong><%= kelompok.nama %></strong></span><em><%= kelompok.items.length %> materi</em></th></tr>
+                                <!-- baris materi ditambahkan di commit berikutnya -->
+                            </tbody>
+                        <% }) %>
                     </table>
                 </div>
             <% } %>
