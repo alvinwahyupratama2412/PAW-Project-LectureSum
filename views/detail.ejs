@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; padding: 0 !important; }
+            .paper-sheet { box-shadow: none !important; border: none !important; padding: 0 !important; max-width: 100% !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen py-8 px-4">
+
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap justify-between items-center gap-3 no-print">
+        <a href="/" class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 shadow-sm transition">
+            &larr; Kembali ke Dashboard
+        </a>
+        
+        <div class="flex items-center gap-2">
+            <% if (materi.file_dokumen) { %>
+                <a href="<%= materi.file_dokumen %>" target="_blank" class="bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-50 shadow-sm transition">
+                    Unduh PDF Asli
+                </a>
+            <% } %>
+            <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-900 shadow-sm transition">
+                Cetak / Simpan PDF
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-4xl mx-auto bg-white shadow-md border border-gray-200 rounded-sm p-8 sm:p-14 paper-sheet">
+        <header class="border-b-2 border-gray-800 pb-6 mb-8">
+            <div class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+                <span>LectureSum &bull; Ringkasan Materi Perkuliahan</span>
+                <span class="<%= materi.status === 'Terbit' ? 'text-green-700' : 'text-amber-600' %>">
+                    Status: <%= materi.status %>
+                </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-4">
+                <%= materi.judul %>
+            </h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 bg-gray-50 p-4 rounded border border-gray-200">
+                <div><span class="font-semibold text-gray-800">Mata Kuliah:</span> <%= materi.mata_kuliah %></div>
+                <div><span class="font-semibold text-gray-800">Pertemuan Ke:</span> <%= materi.pertemuan %></div>
+            </div>
+        </header>
+
+        <% if (materi.ringkasan) { %>
+            <textarea id="raw-markdown" class="hidden"><%= materi.ringkasan %></textarea>
+            <article id="document-content" class="prose prose-slate max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3 prose-p:leading-relaxed prose-li:my-1.5">
+            </article>
+        <% } else { %>
+            <div class="text-center py-12 text-gray-500 border border-dashed border-gray-300 rounded">
+                <p class="font-medium">Belum ada ringkasan AI untuk materi ini.</p>
+                <p class="text-xs mt-1">Silakan edit materi dan unggah dokumen PDF untuk menghasilkan ringkasan otomatis.</p>
+            </div>
+        <% } %>
+
+        <footer class="mt-12 pt-4 border-t border-gray-200 text-xs text-gray-400 flex justify-between">
+            <span>Dihasilkan otomatis oleh LectureSum AI</span>
+            <span><%= new Date(materi.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const rawEl = document.getElementById('raw-markdown');
+            const targetEl = document.getElementById('document-content');
+            
+            if (rawEl && targetEl) {
+                let cleanMarkdown = rawEl.value
+                    .replace(/<br\s*\/?>/gi, '\n')
+                    .replace(/\|/g, '')
+                    .replace(/^---+$/gm, '');
+                
+                targetEl.innerHTML = marked.parse(cleanMarkdown);
+            }
+        });
+    </script>
+</body>
+</html>

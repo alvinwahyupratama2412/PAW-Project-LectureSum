@@ -24,4 +24,17 @@ const renderForm = async (req, res) => {
     }
 };
 
-module.exports = { renderDashboard, renderForm };
+const renderDetail = async (req, res) => {
+    try {
+        const materi = await Materi.findByPk(req.params.id);
+        if (!materi) return res.status(404).send("Materi tidak ditemukan");
+        res.render('detail', { 
+            title: `${materi.judul} - Ringkasan LectureSum`, 
+            materi 
+        });
+    } catch (error) {
+        res.status(500).send("Gagal memuat dokumen ringkasan");
+    }
+};
+
+module.exports = { renderDashboard, renderForm, renderDetail };

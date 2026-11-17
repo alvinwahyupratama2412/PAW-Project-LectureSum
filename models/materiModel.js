@@ -23,7 +23,9 @@ const Materi = sequelize.define('Materi', {
     status: {
         type: DataTypes.ENUM('Draf', 'Terbit'),
         defaultValue: 'Draf'
-    }
+    },
+    file_dokumen: { type: DataTypes.STRING, allowNull: true },
+    ringkasan: { type: DataTypes.TEXT, allowNull: true }
 }, {
     tableName: 'materi',
     timestamps: true 
