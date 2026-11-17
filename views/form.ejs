@@ -64,7 +64,6 @@
                         </div>
                     </div>
 
-                    <!-- BARU -->
                     <div class="upload-section">
                         <div class="upload-heading">
                             <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M5 14v5h14v-5"/></svg></div>
@@ -91,5 +90,31 @@
             <p class="form-footnote">LectureSum <span>•</span> Kelola materi perkuliahan dengan lebih praktis.</p>
         </main>
     </div>
+
+    <!-- BARU -->
+    <script>
+        const fileInput = document.getElementById('file_dokumen');
+        const dropZone = document.getElementById('dropZone');
+        const fileName = document.getElementById('fileName');
+
+        function showFile(file) {
+            if (!file) return;
+            fileName.textContent = file.name;
+            dropZone.classList.add('has-file');
+        }
+        fileInput.addEventListener('change', () => showFile(fileInput.files[0]));
+        ['dragenter', 'dragover'].forEach(type => dropZone.addEventListener(type, event => {
+            event.preventDefault(); dropZone.classList.add('is-dragging');
+        }));
+        ['dragleave', 'drop'].forEach(type => dropZone.addEventListener(type, event => {
+            event.preventDefault(); dropZone.classList.remove('is-dragging');
+        }));
+        dropZone.addEventListener('drop', event => {
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                const transfer = new DataTransfer(); transfer.items.add(file); fileInput.files = transfer.files; showFile(file);
+            }
+        });
+    </script>
 </body>
 </html>
