@@ -12,6 +12,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger);
 
 app.use('/api', apiRoutes);
@@ -19,11 +20,9 @@ app.use('/', viewRoutes);
 
 const PORT = process.env.PORT || 5173;
 
-sequelize.sync() 
+sequelize.sync({ alter: true }) 
     .then(() => {
-        console.log('Database PostgreSQL berhasil terhubung & tersinkronisasi.');
-        app.listen(PORT, () => {
-            console.log(`LectureSum Server aktif di http://localhost:${PORT}`);
-        });
+        console.log('Database PostgreSQL terhubung.');
+        app.listen(PORT, () => console.log(`Server aktif di http://localhost:${PORT}`));
     })
-    .catch(err => console.error('Koneksi database gagal:', err));
+    .catch(err => console.error('Koneksi gagal:', err));
