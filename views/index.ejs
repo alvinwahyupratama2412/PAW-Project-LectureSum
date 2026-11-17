@@ -68,7 +68,18 @@
                     <a href="/form" class="primary-button">Tambah Materi</a>
                 </div>
             <% } else { %>
-                <!-- tabel ditambahkan di commit berikutnya -->
+                                <div class="table-wrap">
+                    <table class="materials-table">
+                        <thead><tr>
+                            <th>Judul Materi</th>
+                            <th class="center-cell">Pertemuan</th>
+                            <th>Status</th>
+                            <th>Sumber</th>
+                            <th class="action-heading"><span class="sr-only">Aksi</span></th>
+                        </tr></thead>
+                        <!-- grup mata kuliah ditambahkan di commit berikutnya -->
+                    </table>
+                </div>
             <% } %>
         </section>
     </main>
