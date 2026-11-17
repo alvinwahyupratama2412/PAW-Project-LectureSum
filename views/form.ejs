@@ -9,7 +9,6 @@
 </head>
 <body>
     <div class="app-shell">
-        <!-- BARU -->
         <header class="topbar">
             <a class="brand" href="/" aria-label="LectureSum beranda">
                 <span class="brand-mark">L</span>
@@ -24,6 +23,51 @@
                 </button>
             </div>
         </header>
+
+        <!-- BARU -->
+        <main class="form-page">
+            <a href="/" class="back-link"><span aria-hidden="true">←</span> Kembali ke dashboard</a>
+            <section class="form-card">
+                <div class="form-heading">
+                    <div class="form-heading-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                    </div>
+                    <div>
+                        <p class="eyebrow">MANAJEMEN PERKULIAHAN</p>
+                        <h1><%= materi ? 'Edit Materi' : 'Tambah Materi Baru' %></h1>
+                        <p class="page-subtitle">Lengkapi informasi materi dan unggah dokumen perkuliahan.</p>
+                    </div>
+                </div>
+
+                <form id="materiForm" class="materi-form">
+                    <input type="hidden" id="materiId" value="<%= materi ? materi.id : '' %>">
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="mataKuliah">Mata Kuliah <span>*</span></label>
+                            <input type="text" id="mataKuliah" value="<%= materi ? materi.mata_kuliah : '' %>" placeholder="Contoh: Pemrograman Web" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="pertemuan">Pertemuan <span>*</span></label>
+                            <input type="number" id="pertemuan" value="<%= materi ? materi.pertemuan : '' %>" min="1" placeholder="Contoh: 7" required>
+                        </div>
+                        <div class="field-group field-full">
+                            <label for="judul">Judul Materi <span>*</span></label>
+                            <input type="text" id="judul" value="<%= materi ? materi.judul : '' %>" placeholder="Masukkan judul materi perkuliahan" required>
+                        </div>
+                        <div class="field-group field-full">
+                            <label for="status">Status Materi</label>
+                            <select id="status">
+                                <option value="Belum dipelajari" <%= !materi || materi.status === 'Belum dipelajari' || materi.status === 'Draf' ? 'selected' : '' %>>Belum dipelajari</option>
+                                <option value="Sedang dipelajari" <%= materi && materi.status === 'Sedang dipelajari' ? 'selected' : '' %>>Sedang dipelajari</option>
+                                <option value="Sudah Dipelajari" <%= materi && (materi.status === 'Sudah Dipelajari' || materi.status === 'Terbit') ? 'selected' : '' %>>Sudah Dipelajari</option>
+                            </select>
+                            <small class="field-hint">Atur progres belajar materi ini.</small>
+                        </div>
+                    </div>
+                    <!-- upload dan tombol ditambahkan di commit berikutnya -->
+                </form>
+            </section>
+        </main>
     </div>
 </body>
 </html>
