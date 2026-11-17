@@ -24,7 +24,6 @@
             </div>
         </header>
 
-        <!-- BARU -->
         <main class="form-page">
             <a href="/" class="back-link"><span aria-hidden="true">←</span> Kembali ke dashboard</a>
             <section class="form-card">
@@ -64,9 +63,32 @@
                             <small class="field-hint">Atur progres belajar materi ini.</small>
                         </div>
                     </div>
-                    <!-- upload dan tombol ditambahkan di commit berikutnya -->
+
+                    <!-- BARU -->
+                    <div class="upload-section">
+                        <div class="upload-heading">
+                            <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M5 14v5h14v-5"/></svg></div>
+                            <div><label for="file_dokumen">Dokumen Materi <span>*</span></label><p>Unggah dokumen untuk diproses dan diringkas oleh Gemini AI.</p></div>
+                        </div>
+                        <label class="drop-zone" id="dropZone" for="file_dokumen">
+                            <input type="file" id="file_dokumen" accept=".pdf,.txt,application/pdf,text/plain">
+                            <span class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M5 14v5h14v-5"/></svg></span>
+                            <strong id="fileName">Klik untuk memilih dokumen</strong>
+                            <span class="drop-caption">atau tarik file ke area ini</span>
+                            <span class="file-format">Format PDF atau TXT</span>
+                        </label>
+                        <% if(materi && materi.file_dokumen) { %>
+                            <p class="existing-file">Dokumen tersimpan: <strong><%= materi.nama_file_asli || materi.file_dokumen.split('/').pop() %></strong></p>
+                        <% } %>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/" class="secondary-button">Batal</a>
+                        <button type="submit" class="primary-button form-submit"><span id="btnText">Simpan Materi</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+                    </div>
                 </form>
             </section>
+            <p class="form-footnote">LectureSum <span>•</span> Kelola materi perkuliahan dengan lebih praktis.</p>
         </main>
     </div>
 </body>
