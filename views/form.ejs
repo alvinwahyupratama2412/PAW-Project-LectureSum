@@ -91,8 +91,8 @@
         </main>
     </div>
 
-    <!-- BARU -->
     <script>
+        const form = document.getElementById('materiForm'); // BARU
         const fileInput = document.getElementById('file_dokumen');
         const dropZone = document.getElementById('dropZone');
         const fileName = document.getElementById('fileName');
@@ -113,6 +113,35 @@
             const file = event.dataTransfer.files[0];
             if (file) {
                 const transfer = new DataTransfer(); transfer.items.add(file); fileInput.files = transfer.files; showFile(file);
+            }
+        });
+
+        // BARU
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('materiId').value;
+            const formData = new FormData();
+            formData.append('mata_kuliah', document.getElementById('mataKuliah').value);
+            formData.append('pertemuan', document.getElementById('pertemuan').value);
+            formData.append('judul', document.getElementById('judul').value);
+            formData.append('status', document.getElementById('status').value);
+            const fileDokumen = fileInput.files[0];
+            if (fileDokumen) formData.append('dokumen', fileDokumen);
+
+            const button = form.querySelector('button[type="submit"]');
+            const buttonText = document.getElementById('btnText');
+            button.disabled = true;
+            button.classList.add('is-loading');
+            buttonText.textContent = fileDokumen ? 'AI Sedang Meringkas...' : 'Menyimpan...';
+            try {
+                const response = await fetch(id ? `/api/materi/${id}` : '/api/materi', { method: id ? 'PUT' : 'POST', body: formData });
+                if (response.ok) window.location.href = '/';
+                else throw new Error('Gagal menyimpan materi');
+            } catch (error) {
+                alert('Terjadi kesalahan saat memproses data. Periksa koneksi dan coba lagi.');
+                button.disabled = false;
+                button.classList.remove('is-loading');
+                buttonText.textContent = 'Simpan Materi';
             }
         });
     </script>
