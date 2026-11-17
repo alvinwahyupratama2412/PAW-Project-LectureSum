@@ -55,7 +55,22 @@
             </article>
         </section>
 
-        <!-- daftar materi ditambahkan di commit berikutnya -->
+                <section class="content-card">
+            <div class="content-card-header">
+                <div><h2>Daftar Materi</h2><p>Materi dikelompokkan berdasarkan mata kuliah.</p></div>
+                <span class="count-pill"><%= materi.length %> materi</span>
+            </div>
+
+            <% if (materi.length === 0) { %>
+                <div class="empty-state">
+                    <div class="empty-icon">＋</div><h3>Belum ada materi</h3>
+                    <p>Mulai dengan menambahkan materi perkuliahan pertamamu.</p>
+                    <a href="/form" class="primary-button">Tambah Materi</a>
+                </div>
+            <% } else { %>
+                <!-- tabel ditambahkan di commit berikutnya -->
+            <% } %>
+        </section>
     </main>
 </div>
 </body>
