@@ -108,6 +108,14 @@
         });
     });
 </script>
+    async function hapusMateri(id) {
+        if (!confirm('Yakin ingin menghapus materi ini?')) return;
+        try {
+            const response = await fetch(`/api/materi/${id}`, { method: 'DELETE' });
+            if (response.ok) window.location.reload();
+            else alert('Materi gagal dihapus. Silakan coba lagi.');
+        } catch (error) { alert('Tidak dapat terhubung ke server.'); }
+    }
                     </table>
                 </div>
             <% } %>
