@@ -80,7 +80,17 @@
                                                 <% kelompokMateri.forEach(kelompok => { %>
                             <tbody class="course-group">
                                 <tr class="course-group-heading"><th colspan="5"><span class="course-mark"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15M8 7h8M8 10.5h7"/></svg></span><span><small>MATA KULIAH</small><strong><%= kelompok.nama %></strong></span><em><%= kelompok.items.length %> materi</em></th></tr>
-                                <!-- baris materi ditambahkan di commit berikutnya -->
+                                                                <% kelompok.items.forEach(item => {
+                                    const statusClass = item.status === 'Sudah Dipelajari' ? 'status-done' : item.status === 'Sedang dipelajari' ? 'status-progress' : 'status-not-started';
+                                    const canOpen = Boolean(item.ringkasan);
+                                %>
+                                    <tr class="material-row <%= canOpen ? 'is-clickable' : '' %>" <% if (canOpen) { %>data-href="/materi/<%= encodeURIComponent(item.id) %>" tabindex="0" role="link" aria-label="Buka ringkasan <%= item.judul %>"<% } %>>
+                                        <td><div class="material-cell"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M7 3.8h7l4 4v12.4H7z"/><path d="M14 3.8v4h4M10 12h5M10 15.5h5"/></svg></div><div class="material-info"><strong><%= item.judul %></strong><span><%= item.mata_kuliah %></span></div></div></td>
+                                        <td class="center-cell"><span class="meeting-number"><%= item.pertemuan %></span></td>
+                                        <td><span class="status-badge <%= statusClass %>"><span></span><%= item.status || 'Belum dipelajari' %></span></td>
+                                        <!-- kolom sumber dan aksi ditambahkan di commit berikutnya -->
+                                    </tr>
+                                <% }) %>
                             </tbody>
                         <% }) %>
                     </table>
