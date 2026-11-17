@@ -88,7 +88,11 @@
                                         <td><div class="material-cell"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M7 3.8h7l4 4v12.4H7z"/><path d="M14 3.8v4h4M10 12h5M10 15.5h5"/></svg></div><div class="material-info"><strong><%= item.judul %></strong><span><%= item.mata_kuliah %></span></div></div></td>
                                         <td class="center-cell"><span class="meeting-number"><%= item.pertemuan %></span></td>
                                         <td><span class="status-badge <%= statusClass %>"><span></span><%= item.status || 'Belum dipelajari' %></span></td>
-                                        <!-- kolom sumber dan aksi ditambahkan di commit berikutnya -->
+                                                                                <td><% if (item.file_dokumen) { %><a class="source-link" href="<%= item.file_dokumen %>" target="_blank" rel="noopener" title="Buka dokumen sumber" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M7 3.8h7l4 4v12.4H7z"/><path d="M14 3.8v4h4M10 13h5"/></svg><span><%= item.nama_file_asli || item.file_dokumen.split('/').pop() %></span></a><% } else { %><span class="muted-source">Belum ada file</span><% } %></td>
+                                        <td class="actions-cell"><div class="action-group">
+                                            <a href="/form?id=<%= item.id %>" class="icon-action edit-button" title="Edit materi" aria-label="Edit materi" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="m14 5 5 5M4 20l4.2-.9L19 8.3a2.1 2.1 0 0 0-3-3L5.2 16.1z"/></svg></a>
+                                            <button type="button" class="icon-action delete-button" title="Hapus materi" aria-label="Hapus materi" onclick="event.stopPropagation(); hapusMateri('<%= item.id %>')"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-.8 13H6.8L6 7m4 4v5m4-5v5"/></svg></button>
+                                        </div></td>
                                     </tr>
                                 <% }) %>
                             </tbody>
