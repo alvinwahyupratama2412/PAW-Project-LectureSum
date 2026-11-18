@@ -1,86 +1,124 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; padding: 0 !important; }
-            .paper-sheet { box-shadow: none !important; border: none !important; padding: 0 !important; max-width: 100% !important; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <script src="/js/theme.js" defer></script>
+  <style>
+    * { box-sizing: border-box; }
+    body.detail-page { margin:0; min-height:100vh; background:#f1f2f4; color:#172033; font-family:Arial, Helvetica, sans-serif; border-top:18px solid #292929; padding:20px 16px 32px; }
+    .detail-toolbar { width:min(100%, 560px); margin:0 auto 16px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .detail-toolbar a,.detail-toolbar button { display:inline-flex; align-items:center; justify-content:center; min-height:27px; padding:5px 10px; border:1px solid #cbd2dc; border-radius:4px; background:#fff; color:#273244; font-size:10px; text-decoration:none; cursor:pointer; }
+    .detail-toolbar .pdf-original { color:#2454a6; border-color:#9bb8e8; }
+    .detail-toolbar .print-btn { background:#202b3c; border-color:#202b3c; color:#fff; font-weight:600; }
+    .detail-paper { width:min(100%,560px); min-height:790px; margin:0 auto; padding:36px 35px 28px; background:#fff; border:1px solid #d9dde3; box-shadow:0 2px 5px #00000012; }
+    .detail-kicker { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:7px; color:#69717d; font-size:7px; text-transform:uppercase; letter-spacing:.25px; }
+    .detail-status { color:#b7791f; white-space:nowrap; }
+    .detail-title { margin:0 0 10px; color:#111827; font-size:19px; line-height:1.2; font-weight:700; }
+    .detail-meta { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 11px; border:1px solid #dfe3e8; border-radius:3px; background:#fafafa; color:#536071; font-size:8px; }
+    .detail-meta strong { color:#283447; font-weight:500; }
+    .detail-divider { border:0; border-top:1px solid #252525; margin:14px 0 22px; }
+    .detail-content { color:#30343b; font-size:9px; line-height:1.62; overflow-wrap:anywhere; }
+    .detail-content h1,.detail-content h2,.detail-content h3 { color:#172033; font-size:11px; line-height:1.4; margin:17px 0 8px; font-weight:700; }
+    .detail-content h1:first-child,.detail-content h2:first-child,.detail-content h3:first-child { margin-top:0; }
+    .detail-content p { margin:0 0 9px; }
+    .detail-content ul,.detail-content ol { margin:5px 0 10px; padding-left:19px; }
+    .detail-content li { padding-left:1px; margin:3px 0; }
+    .detail-content strong { font-weight:700; color:#202936; }
+    .detail-content em { font-style:italic; }
+    .detail-content blockquote { margin:8px 0; padding-left:10px; border-left:2px solid #d8dee8; color:#596273; }
+    .detail-content table { display:none; }
+    .detail-empty { padding:18px 0; color:#777; font-size:10px; }
+    .detail-footer { display:flex; justify-content:space-between; gap:10px; margin-top:22px; padding-top:9px; border-top:1px solid #d9dde3; color:#9aa0a8; font-size:7px; }
+    @media(max-width:600px) { body.detail-page{padding:12px 10px 24px}.detail-paper{padding:25px 20px;min-height:0}.detail-toolbar{align-items:flex-start}.detail-toolbar a,.detail-toolbar button{font-size:9px;padding:5px 7px}.detail-kicker{font-size:6px}.detail-meta{font-size:8px} }
+    @media print { @page{size:A4;margin:12mm} body.detail-page{background:#fff;border:0;padding:0}.detail-toolbar{display:none!important}.detail-paper{width:100%;min-height:0;border:0;box-shadow:none;padding:0}.detail-content{font-size:10pt}.detail-content h1,.detail-content h2,.detail-content h3{font-size:12pt}.detail-footer{break-inside:avoid} }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans min-h-screen py-8 px-4">
-
-    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap justify-between items-center gap-3 no-print">
-        <a href="/" class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 shadow-sm transition">
-            &larr; Kembali ke Dashboard
-        </a>
-        
-        <div class="flex items-center gap-2">
-            <% if (materi.file_dokumen) { %>
-                <a href="<%= materi.file_dokumen %>" target="_blank" class="bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-50 shadow-sm transition">
-                    Unduh PDF Asli
-                </a>
-            <% } %>
-            <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-900 shadow-sm transition">
-                Cetak / Simpan PDF
-            </button>
-        </div>
+<body class="detail-page">
+  <nav class="detail-toolbar no-print">
+    <a href="/">&larr; Kembali ke Dashboard</a>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="theme-switch" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Ganti tema" title="Ganti tema">
+        <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.8"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M20.5 14.1A8.5 8.5 0 0 1 9.9 3.5 8.7 8.7 0 1 0 20.5 14.1Z"/></svg>
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+      </button>
+      <% if (materi.file_dokumen) { %><a class="pdf-original" href="<%= materi.file_dokumen %>" target="_blank" rel="noopener">Unduh PDF Asli</a><% } %>
+      <button class="print-btn" type="button" onclick="window.print()">Cetak / Simpan PDF</button>
     </div>
+  </nav>
 
-    <main class="max-w-4xl mx-auto bg-white shadow-md border border-gray-200 rounded-sm p-8 sm:p-14 paper-sheet">
-        <header class="border-b-2 border-gray-800 pb-6 mb-8">
-            <div class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-                <span>LectureSum &bull; Ringkasan Materi Perkuliahan</span>
-                <span class="<%= materi.status === 'Terbit' ? 'text-green-700' : 'text-amber-600' %>">
-                    Status: <%= materi.status %>
-                </span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-4">
-                <%= materi.judul %>
-            </h1>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 bg-gray-50 p-4 rounded border border-gray-200">
-                <div><span class="font-semibold text-gray-800">Mata Kuliah:</span> <%= materi.mata_kuliah %></div>
-                <div><span class="font-semibold text-gray-800">Pertemuan Ke:</span> <%= materi.pertemuan %></div>
-            </div>
-        </header>
+  <main class="detail-paper">
+    <header>
+      <div class="detail-kicker">
+        <span>LECTURESUM • RINGKASAN MATERI PERKULIAHAN</span>
+        <span class="detail-status">STATUS: <%= (materi.status || 'Belum dipelajari').toUpperCase() %></span>
+      </div>
+      <h1 class="detail-title"><%= materi.judul %></h1>
+      <div class="detail-meta">
+        <div>Mata Kuliah: <strong><%= materi.mata_kuliah %></strong></div>
+        <div>Pertemuan Ke: <strong><%= materi.pertemuan %></strong></div>
+      </div>
+    </header>
+    <hr class="detail-divider">
 
-        <% if (materi.ringkasan) { %>
-            <textarea id="raw-markdown" class="hidden"><%= materi.ringkasan %></textarea>
-            <article id="document-content" class="prose prose-slate max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3 prose-p:leading-relaxed prose-li:my-1.5">
-            </article>
-        <% } else { %>
-            <div class="text-center py-12 text-gray-500 border border-dashed border-gray-300 rounded">
-                <p class="font-medium">Belum ada ringkasan AI untuk materi ini.</p>
-                <p class="text-xs mt-1">Silakan edit materi dan unggah dokumen PDF untuk menghasilkan ringkasan otomatis.</p>
-            </div>
-        <% } %>
+    <% if (materi.ringkasan && String(materi.ringkasan).trim()) { %>
+      <textarea id="raw-summary" hidden><%= materi.ringkasan %></textarea>
+      <article id="summary-content" class="detail-content"></article>
+    <% } else { %>
+      <div class="detail-empty">Ringkasan belum tersedia untuk materi ini.</div>
+    <% } %>
 
-        <footer class="mt-12 pt-4 border-t border-gray-200 text-xs text-gray-400 flex justify-between">
-            <span>Dihasilkan otomatis oleh LectureSum AI</span>
-            <span><%= new Date(materi.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
-        </footer>
-    </main>
+    <footer class="detail-footer">
+      <span>Dihasilkan otomatis oleh LectureSum AI</span>
+      <span><%= new Date(materi.updatedAt || Date.now()).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) %></span>
+    </footer>
+  </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const rawEl = document.getElementById('raw-markdown');
-            const targetEl = document.getElementById('document-content');
-            
-            if (rawEl && targetEl) {
-                let cleanMarkdown = rawEl.value
-                    .replace(/<br\s*\/?>/gi, '\n')
-                    .replace(/\|/g, '')
-                    .replace(/^---+$/gm, '');
-                
-                targetEl.innerHTML = marked.parse(cleanMarkdown);
-            }
-        });
-    </script>
+  <script>
+    // Markdown ringan tanpa ketergantungan CDN, agar isi tetap muncul saat offline.
+    function escapeHTML(value) {
+      return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function inlineFormat(value) {
+      return escapeHTML(value)
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/__(.+?)__/g,'<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g,'<em>$1</em>')
+        .replace(/_(.+?)_/g,'<em>$1</em>');
+    }
+    function renderSummary(source) {
+      const lines = source.replace(/\r/g,'').split('\n');
+      let html = '', paragraph = [], listType = null;
+      const flushParagraph = () => { if (paragraph.length) { html += '<p>' + inlineFormat(paragraph.join(' ')) + '</p>'; paragraph = []; } };
+      const closeList = () => { if (listType) { html += listType === 'ol' ? '</ol>' : '</ul>'; listType = null; } };
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        if (!line) { flushParagraph(); closeList(); continue; }
+        // Garis tabel markdown tidak ditampilkan sebagai tabel; isi baris diperlakukan sebagai teks biasa.
+        if (/^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(line)) continue;
+        if (/^\|.*\|$/.test(line)) { flushParagraph(); closeList(); html += '<p>' + inlineFormat(line.replace(/^\||\|$/g,'').split('|').map(x=>x.trim()).filter(Boolean).join(' · ')) + '</p>'; continue; }
+        const heading = line.match(/^(#{1,3})\s+(.+)$/);
+        if (heading) { flushParagraph(); closeList(); const level = Math.min(3, heading[1].length); html += `<h${level}>${inlineFormat(heading[2])}</h${level}>`; continue; }
+        const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+        const unordered = line.match(/^[-*•]\s+(.+)$/);
+        if (ordered || unordered) {
+          flushParagraph(); const wanted = ordered ? 'ol' : 'ul';
+          if (listType !== wanted) { closeList(); html += wanted === 'ol' ? '<ol>' : '<ul>'; listType = wanted; }
+          html += '<li>' + inlineFormat((ordered || unordered)[1]) + '</li>'; continue;
+        }
+        closeList(); paragraph.push(line);
+      }
+      flushParagraph(); closeList();
+      return html;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const raw = document.getElementById('raw-summary');
+      const target = document.getElementById('summary-content');
+      if (raw && target) target.innerHTML = renderSummary(raw.value);
+    });
+  </script>
 </body>
 </html>

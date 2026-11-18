@@ -2,8 +2,22 @@ const Materi = require('../models/materiModel');
 
 const renderDashboard = async (req, res) => {
     try {
-        const daftarMateri = await Materi.findAll({ order: [['createdAt', 'DESC']] });
-        res.render('index', { title: 'LectureSum - Dashboard', materi: daftarMateri });
+        const daftarMateri = await Materi.findAll({ order: [['mata_kuliah', 'ASC'], ['pertemuan', 'ASC'], ['createdAt', 'DESC']] });
+
+        // Kelompokkan materi berdasarkan nama mata kuliah (tidak membedakan kapital).
+        const kelompokMap = new Map();
+        daftarMateri.forEach(item => {
+            const nama = (item.mata_kuliah || 'Tanpa Mata Kuliah').trim();
+            const key = nama.toLocaleLowerCase('id-ID');
+            if (!kelompokMap.has(key)) kelompokMap.set(key, { nama, items: [] });
+            kelompokMap.get(key).items.push(item);
+        });
+
+        res.render('index', {
+            title: 'LectureSum - Dashboard',
+            materi: daftarMateri,
+            kelompokMateri: Array.from(kelompokMap.values())
+        });
     } catch (error) {
         res.status(500).send("Gagal memuat dashboard");
     }
