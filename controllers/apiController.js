@@ -71,6 +71,7 @@ const createMateri = async (req, res) => {
 
         if (req.file) {
             data.file_dokumen = `/uploads/docs/${req.file.filename}`;
+            data.nama_file_asli = req.file.originalname;
 
             // Jika file yang diupload adalah PDF
             if (req.file.mimetype === 'application/pdf') {
@@ -110,6 +111,7 @@ const updateMateri = async (req, res) => {
 
         if (req.file) {
             data.file_dokumen = `/uploads/docs/${req.file.filename}`;
+            data.nama_file_asli = req.file.originalname;
 
             // Jika file baru adalah PDF
             if (req.file.mimetype === 'application/pdf') {
