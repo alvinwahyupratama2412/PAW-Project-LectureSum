@@ -22,3 +22,14 @@
 
         if (save) localStorage.setItem(storageKey, nextMode);
     }
+
+    let savedMode = 'light';
+    try { savedMode = localStorage.getItem(storageKey) || 'light'; } catch (_) {}
+    applyMode(savedMode, false);
+
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            applyMode(root.dataset.theme === 'dark' ? 'light' : 'dark');
+        });
+    }
+})();
